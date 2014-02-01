@@ -29,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -55,60 +56,15 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         recMessagethread();
         
-        /*try{
-			fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-        } 
-        catch(FileNotFoundException e) {
-			e.printStackTrace();
-		}
         
-        for(int i=0;i<5;i++){
-        	try {
-				fos.write(string.getBytes());
-				Log.i("print " , "printed on file");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-        }
-        try {
-			fos.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        */
-        //arr[0]="1";
         count=0;
-        //Log.i("rff","here");
+        
         read_from_file();
         
         ListView l=(ListView) findViewById(R.id.listView1);
         adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, list_arr);
         l.setAdapter(adapter);
         //l.setDivider(null);
-        
-        
-        /*try {
-			fis =  openFileInput(FILENAME);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        try {
-			Log.i("read", fis.read()+"");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        try {
-			fis.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
         
         //createWifiAccessPoint();
     }
@@ -204,8 +160,6 @@ public class MainActivity extends Activity {
     
     
     private void receive_message(){
-    	 
-    	 
     	IntentFilter i = new IntentFilter();
         i.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         Log.i("Access point " , "2");
@@ -227,16 +181,16 @@ public class MainActivity extends Activity {
                        }
                 }
                 
-                
                 if(m==wifiList.size()){
                 	received_msg="";
                 }
                 else{
-                	arr[count] = received_msg;
-                	count++;
+                	list_arr.add(received_msg+"\n");
+            		count++;
+            		adapter.notifyDataSetChanged();
+//            		/mEdit.setText ("");
                 	//tv =(TextView)findViewById(R.id.textView1);
                 	//tv.setText(received_msg);
-                	
                 }
                 receive_message();
     		}
@@ -252,7 +206,6 @@ public class MainActivity extends Activity {
 	    		//SystemClock.sleep(150);
 	    	//}
 		}
-
 	}
     
     private void recMessagethread(){
@@ -276,10 +229,10 @@ public class MainActivity extends Activity {
     	EditText mEdit   = (EditText)findViewById(R.id.editText1);
     	String message = mEdit.getText().toString();
     	if(message!=""){
-    		//createWifiAccessPoint("@!"+message);
-    		list_arr.add(message+"\n");
-    		count++;
-    		adapter.notifyDataSetChanged();
+    		createWifiAccessPoint("@!"+message);
+    		//list_arr.add(message+"\n");
+    		//count++;
+    		//adapter.notifyDataSetChanged();
     		mEdit.setText ("");
     	}
     }
@@ -349,5 +302,4 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-    
 }
